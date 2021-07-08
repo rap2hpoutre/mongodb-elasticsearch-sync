@@ -19,7 +19,7 @@ $ npm install -g mongodb-elasticsearch-sync
 $ mongodb-elasticsearch-sync COMMAND
 running command...
 $ mongodb-elasticsearch-sync (-v|--version|version)
-mongodb-elasticsearch-sync/0.0.0 darwin-x64 node-v14.15.3
+mongodb-elasticsearch-sync/0.1.0 darwin-x64 node-v14.15.3
 $ mongodb-elasticsearch-sync --help [COMMAND]
 USAGE
   $ mongodb-elasticsearch-sync COMMAND
