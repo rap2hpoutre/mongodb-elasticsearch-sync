@@ -1,0 +1,48 @@
+{
+  "name": "mongodb-elasticsearch-sync",
+  "description": "Sync mongoDB and elasticseach",
+  "version": "0.0.0",
+  "author": "Raphaël Huchet @rap2hpoutre",
+  "bin": {
+    "mongodb-elasticsearch-sync": "./bin/run"
+  },
+  "bugs": "https://github.com/rap2hpoutre/mongodb-elasticsearch-sync/issues",
+  "dependencies": {
+    "@oclif/command": "^1",
+    "@oclif/config": "^1",
+    "@oclif/plugin-help": "^3",
+    "elasticsearch": "^16.7.2",
+    "mongodb-schema": "^9.0.0",
+    "pluralize": "^8.0.0",
+    "tslib": "^1"
+  },
+  "devDependencies": {
+    "@oclif/dev-cli": "^1",
+    "@types/node": "^10",
+    "ts-node": "^8",
+    "typescript": "^3.3"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "files": [
+    "/bin",
+    "/lib"
+  ],
+  "homepage": "https://github.com/rap2hpoutre/mongodb-elasticsearch-sync",
+  "keywords": [
+    "oclif"
+  ],
+  "license": "MIT",
+  "main": "lib/index.js",
+  "oclif": {
+    "bin": "mongodb-elasticsearch-sync"
+  },
+  "repository": "rap2hpoutre/mongodb-elasticsearch-sync",
+  "scripts": {
+    "prepack": "rm -rf lib && tsc -b && oclif-dev readme",
+    "test": "echo NO TESTS",
+    "version": "oclif-dev readme && git add README.md"
+  },
+  "types": "lib/index.d.ts"
+}
