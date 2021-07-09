@@ -16,6 +16,12 @@ function parseSchemaPromise(schema: any): Promise<any> {
   });
 }
 
+function* chunks(arr, n) {
+  for (let i = 0; i < arr.length; i += n) {
+    yield arr.slice(i, i + n);
+  }
+}
+
 class MongoElasticSync extends Command {
   static description = "Sync MongoDB documents to Elasticsearch";
 
@@ -67,7 +73,7 @@ class MongoElasticSync extends Command {
       collectionsSchemas.push(this.getCollectionSchema(collection, schema));
     }
 
-    this.log("Convert to schema to elasticsearch mapping…");
+    this.log("Convert schema to elasticsearch mapping…");
 
     // Convert schema to elasticsearch mapping
     const mappings = collectionsSchemas.map((collectionSchema) => {
@@ -95,7 +101,7 @@ class MongoElasticSync extends Command {
       const estimatedDocsCount = await db
         .collection(collectionSchema.name)
         .estimatedDocumentCount();
-      this.log(` Estimated documents count: ${estimatedDocsCount}`);
+      this.log(`  Estimated documents count: ${estimatedDocsCount}`);
       const collectionData = await db
         .collection(collectionSchema.name)
         .find()
@@ -116,12 +122,22 @@ class MongoElasticSync extends Command {
         bulk.push({ ...this.serialize(data) });
       }
       if (bulk.length) {
-        const res = await es.bulk({
-          refresh: true,
-          body: bulk,
-        });
-        if (res.error) {
-          this.error(`Error syncing ${collectionSchema.name}: ${res.error}`);
+        const subBulk = [...chunks(bulk, 2000)];
+        for (const subBulkOf2000 of subBulk) {
+          this.log(`   Syncing ${subBulkOf2000.length} documents`);
+          const res = await es.bulk({
+            refresh: true,
+            body: subBulkOf2000,
+          });
+          if (res.error || res.errors) {
+            this.error(
+              `Error syncing ${collectionSchema.name}: ${
+                res.items
+                  .map((item) => item.index.error.reason)
+                  .filter((e) => e)[0]
+              }`
+            );
+          }
         }
       }
     }
