@@ -4,7 +4,7 @@ const parseSchema = require("mongodb-schema");
 const elasticsearch = require("elasticsearch");
 const pluralize = require("pluralize");
 
-function parseSchemaPromise(schema: string): Promise<any> {
+function parseSchemaPromise(schema: any): Promise<any> {
   return new Promise((resolve, reject) => {
     parseSchema(schema, (err, result) => {
       if (err) {
@@ -113,12 +113,14 @@ class MongoElasticSync extends Command {
         });
         bulk.push({ ...this.serialize(data) });
       }
-      const res = await es.bulk({
-        refresh: true,
-        body: bulk,
-      });
-      if (res.error) {
-        this.error(`Error syncing ${collectionSchema.name}: ${res.error}`);
+      if (bulk.length) {
+        const res = await es.bulk({
+          refresh: true,
+          body: bulk,
+        });
+        if (res.error) {
+          this.error(`Error syncing ${collectionSchema.name}: ${res.error}`);
+        }
       }
     }
     await client.close();
@@ -194,6 +196,10 @@ class MongoElasticSync extends Command {
   }
 
   findBestProbabilityType(types: any[]): any {
+    // We assume undefined types are the same as string.
+    if (types.filter((t) => t.name !== "Undefined").length === 0) {
+      return { name: "String" };
+    }
     const max = types
       .filter((t) => t.name !== "Undefined")
       .reduce((max, type) => {
