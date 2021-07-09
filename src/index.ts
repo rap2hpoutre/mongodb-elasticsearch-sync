@@ -67,6 +67,8 @@ class MongoElasticSync extends Command {
       collectionsSchemas.push(this.getCollectionSchema(collection, schema));
     }
 
+    this.log("Convert to schema to elasticsearch mapping…");
+
     // Convert schema to elasticsearch mapping
     const mappings = collectionsSchemas.map((collectionSchema) => {
       return this.getMapping(collectionSchema, flags.singularizeName);
@@ -131,7 +133,9 @@ class MongoElasticSync extends Command {
     const exclude = ["id", "__v", "_id"];
 
     const mapping = {};
-    for (const field of fields.filter((f) => !exclude.includes(f.name))) {
+    for (const field of fields
+      .filter((f) => f)
+      .filter((f) => !exclude.includes(f.name))) {
       if (field.type === "String") {
         mapping[field.name] = {
           type: "text",
