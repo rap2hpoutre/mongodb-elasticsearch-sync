@@ -1,7 +1,7 @@
 mongodb-elasticsearch-sync
 ==========================
 
-Sync MongoDB and Elasticseach database: copy (and convert) all data from a MongoDB database
+Syncronize MongoDB and Elasticseach database. Copy and convert all data from a MongoDB database
 and index it in Elasticsearch.
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
@@ -32,7 +32,7 @@ npx mongodb-elasticsearch-sync \
 ```
 ## Why
 
-I recently created a (tool)[https://github.com/rap2hpoutre/mongodb-anonymizer#mongodb-anonymizer] 
+I recently created a [tool](https://github.com/rap2hpoutre/mongodb-anonymizer#mongodb-anonymizer)
 to anonymize MongoDB database (from a source db to a target db) to help me build a staging 
 environment for a project. Since I use MongoDB with Elasticsearch for this project, I needed a
 one-line command to create the Elascticsearch indices after this process.
