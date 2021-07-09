@@ -1,7 +1,7 @@
 import { Command, flags } from "@oclif/command";
 import { MongoClient } from "mongodb";
 const parseSchema = require("mongodb-schema");
-const elasticsearch = require("elasticsearch");
+const elasticsearch = require("@elastic/elasticsearch");
 const pluralize = require("pluralize");
 
 function parseSchemaPromise(schema: any): Promise<any> {
@@ -38,6 +38,10 @@ class MongoElasticSync extends Command {
       char: "s",
       description: "singularize document names in Elasticsearch",
     }),
+    ignoreCollections: flags.string({
+      char: "i",
+      description: "collections will be ignored (comma separated)",
+    }),
   };
 
   static args = [{ name: "file" }];
@@ -61,7 +65,10 @@ class MongoElasticSync extends Command {
     const db = client.db();
 
     this.log("Getting collections…");
-    const collections = await db.listCollections().toArray();
+    const collections = (await db.listCollections().toArray()).filter(
+      (e) =>
+        !flags.ignoreCollections || !flags.ignoreCollections.includes(e.name)
+    );
 
     const collectionsSchemas = [];
     // Get all the schemas for each collection

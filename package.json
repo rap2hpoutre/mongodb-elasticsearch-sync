@@ -8,6 +8,7 @@
   },
   "bugs": "https://github.com/rap2hpoutre/mongodb-elasticsearch-sync/issues",
   "dependencies": {
+    "@elastic/elasticsearch": "^7.13.0",
     "@oclif/command": "^1",
     "@oclif/config": "^1",
     "@oclif/plugin-help": "^3",
