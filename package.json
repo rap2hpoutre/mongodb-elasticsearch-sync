@@ -1,7 +1,7 @@
 {
   "name": "mongodb-elasticsearch-sync",
   "description": "Sync mongoDB and elasticseach",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "author": "Raphaël Huchet @rap2hpoutre",
   "bin": {
     "mongodb-elasticsearch-sync": "./bin/run"
